@@ -1,0 +1,16 @@
+{
+  "name": "database_trials",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Shantanu Methikar",
+  "license": "ISC",
+  "devDependencies": {
+    "bootstrap": "^4.4.1",
+    "electron": "^8.2.0",
+    "nedb": "^1.8.0"
+  }
+}
