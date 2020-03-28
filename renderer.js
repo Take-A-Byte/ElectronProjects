@@ -1,3 +1,11 @@
+
+const jsConsts = require('./JavaScripConstants');
+
+const electron = require(jsConsts.const_electron);
+const ipc = electron.ipcRenderer;
+
+const holderDetails = require('./policyHolder');
+
 const name = document.getElementById('name');
 const policyNumber = document.getElementById('policyNumber');
 const policyType = document.getElementById('policyType');
@@ -6,10 +14,12 @@ const maturityDate = document.getElementById('maturityDate');
 const paymentInterval = document.getElementById('payInterval');
 
 function onSubmit(){
-    console.log(name.value, 
+    details = new holderDetails.PolicyHolderDetails(name.value, 
         policyNumber.value,
         policyType.value, 
         issueDate.value, 
         maturityDate.value, 
-        paymentInterval.value);
+        paymentInterval.value );
+
+        // console.log(details);
 }
