@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ShoppingList</title>
+    <link rel="stylesheet" href="./commonStyles.css">
+    <link rel="stylesheet" href="./mainWindow.css">
+    <title>Policy Agent Companion</title>
 </head>
 <body>
-    <h1>Shopping List</h1>
+    <h3>Enter Policy Holder Information</h3>
+    <form>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" placeholder="Enter full name" id="email">
+        </div>
+
+        <div class="form-group">
+            <label for="policyNumber">Policy Number:</label>
+            <input type="text" class="form-control" placeholder="Enter policy number" id="policyNumber">
+
+            <label for="policyType">Policy Type:</label>
+            <select class="form-control" id="policyType">
+                <option value="" disabled selected>Select Type</option>
+                <option value="Policy_1">Policy 1</option>
+                <option value="Policy_2">Policy 2</option>
+                <option value="Policy_3">Policy 3</option>
+                <option value="Policy_4">Policy 4</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="issueDate">Issue Date:</label>
+            <input type="date" class="form-control" placeholder="Select Issue Date" id="issueDate">
+            
+            <label for="maturityDate">Maturity Date:</label>
+            <input type="date" class="form-control" placeholder="Select Maturity Date" id="maturityDate">
+        </div>
+        
+        <div class="form-group">
+            <label for="payInterval">Payment Interval(in days):</label>
+            <input type="number" min="1" class="form-control" placeholder="Select Payment Interval" id="payInterval">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
 </body>
 </html>
