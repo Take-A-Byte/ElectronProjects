@@ -7,18 +7,18 @@
 </head>
 <body>
     <h3>Enter Policy Holder Information</h3>
-    <form>
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" placeholder="Enter full name" id="email">
+    <form style="border: 2px solid black; border-radius: 10px; margin: 1rem; width: 950px;">
+        <div class="form-group row">
+            <label for="name" class="col-1">Name:</label>
+            <input id="name" type="text" class="form-control col-10" placeholder="Enter full name">
         </div>
 
-        <div class="form-group">
-            <label for="policyNumber">Policy Number:</label>
-            <input type="text" class="form-control" placeholder="Enter policy number" id="policyNumber">
+        <div class="form-group row">
+            <label for="policyNumber" class="col-2">Policy Number:</label>
+            <input id="policyNumber" type="text" class="form-control col-4" placeholder="Enter policy number">
 
-            <label for="policyType">Policy Type:</label>
-            <select class="form-control" id="policyType">
+            <label for="policyType" class="col-2">Policy Type:</label>
+            <select id="policyType" class="form-control col-4">
                 <option value="" disabled selected>Select Type</option>
                 <option value="Policy_1">Policy 1</option>
                 <option value="Policy_2">Policy 2</option>
@@ -27,20 +27,24 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="issueDate">Issue Date:</label>
-            <input type="date" class="form-control" placeholder="Select Issue Date" id="issueDate">
+        <div class="form-group row" >
+            <label for="issueDate" class="col-2">Issue Date:</label>
+            <input id="issueDate" type="date" class="form-control col-4" placeholder="Select Issue Date">
             
-            <label for="maturityDate">Maturity Date:</label>
-            <input type="date" class="form-control" placeholder="Select Maturity Date" id="maturityDate">
+            <label for="maturityDate" class="col-2">Maturity Date:</label>
+            <input id="maturityDate" type="date" class="form-control col-4" placeholder="Select Maturity Date">
         </div>
         
-        <div class="form-group">
-            <label for="payInterval">Payment Interval(in days):</label>
-            <input type="number" min="1" class="form-control" placeholder="Select Payment Interval" id="payInterval">
+        <div class="form-group row">
+            <label for="payInterval" class="col-2">Payment Interval:</label>
+            <input id="payInterval" type="number" min="1" class="form-control col-4" placeholder="Select Payment Interval (in days)">
         </div>
         
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary" onclick="onSubmit()">Submit</button>
+          </div>
       </form>
+          
+      <script src="./renderer.js"></script>
 </body>
 </html>
