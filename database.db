@@ -1,0 +1,3 @@
+{"Name":"Shantanu Methikar","_id":"0123","PolicyType":"Policy_1","IssueDate":1585699200000,"MaturityDate":1680220800000,"PaymentInterval":"30","NextPaymentDate":1588291200000}
+{"Name":"Ajinkya Dixit","_id":"1234","PolicyType":"Policy_2","IssueDate":1577750400000,"MaturityDate":1703894400000,"PaymentInterval":"45","NextPaymentDate":1585526400000}
+{"Name":"Monika Shinde","_id":"2345","PolicyType":"Policy_3","IssueDate":1539043200000,"MaturityDate":1602115200000,"PaymentInterval":"60","NextPaymentDate":1585699200000}
