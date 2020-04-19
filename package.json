@@ -9,8 +9,10 @@
   "author": "Shantanu Methikar",
   "license": "ISC",
   "devDependencies": {
+    "electron": "^8.2.0"
+  },
+  "dependencies": {
     "bootstrap": "^4.4.1",
-    "electron": "^8.2.0",
     "nedb": "^1.8.0"
   }
 }

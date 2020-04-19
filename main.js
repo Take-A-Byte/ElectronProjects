@@ -9,7 +9,7 @@ const url = require(jsConsts.const_url);
 const path = require(jsConsts.const_path);
 const ipc = electron.ipcMain;
 
-const {app, BrowserWindow} = electron;
+const { app, BrowserWindow, Notification } = electron;
 //#endregion
 
 //#region nedb_requirements and instantiation
@@ -20,9 +20,8 @@ database.loadDatabase();
 RefreshDatabase();
 //#endregion
     
-
 //#region mainWin Instantiation
-let mainWindow;
+let mainWindow, myNotification;
 
 app.on('ready', function(){
     mainWindow = new BrowserWindow({
@@ -36,6 +35,16 @@ app.on('ready', function(){
         slashes: true
     }));
     mainWindow.openDevTools();
+
+    myNotification = new Notification({
+        title: 'Title', 
+        body: 'Lorem Ipsum Dolor Sit Amet'
+    });
+
+    myNotification.on('click', (event, reply) => {
+        console.log('Notification clicked')
+    });
+    
 });
 //#endregion
 
@@ -69,6 +78,9 @@ ipc.on(eventNames.requestReminders, (event) => {
 
         event.reply(eventNames.reminderRequestReply, [err, weekReminder]);
     });
+    
+    myNotification.show();
+    
 });
 //#endregion
 
