@@ -1,6 +1,7 @@
 
 const jsConsts = require('./JavaScripConstants');
-const eventNames = require('./eventNames');
+const eventNames = require('./eventNames'); 
+const fs = require('fs') 
 
 const electron = require(jsConsts.const_electron);
 const ipc = electron.ipcRenderer;
@@ -42,3 +43,19 @@ ipc.on(eventNames.reminderRequestReply, (event, args) => {
     console.log(args[1]);
 });
 //#endregion
+
+function onAddHolder(){
+    const content = document.getElementById('content');
+
+    fs.readFile('addPolicyHolder.html', (err, data) => { 
+        if (err) throw err; 
+      
+        content.innerHTML = data.toString();
+    });
+
+}
+
+$( '#topheader .navbar-nav a' ).on( 'click', function () {
+	$( '#topheader .navbar-nav' ).find( 'li.active' ).removeClass( 'active' );
+	$( this ).parent( 'li' ).addClass( 'active' );
+});
