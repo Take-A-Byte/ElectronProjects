@@ -39,8 +39,6 @@ app.on('ready', function(){
     }));
     mainWindow.openDevTools();
 
-    console.log(mainWindow.location)
-
     myNotification = new Notification({
         title: 'Title', 
         body: 'Lorem Ipsum Dolor Sit Amet'
