@@ -4,7 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "Shantanu Methikar",
   "license": "ISC",
@@ -15,5 +17,11 @@
     "bootstrap": "^4.4.1",
     "bootstrap-icons": "^1.0.0-alpha3",
     "nedb": "^1.8.0"
+  },
+  "build": {
+    "appId": "database",
+    "win": {
+      "icon": "icon.jpg"
+    }
   }
 }

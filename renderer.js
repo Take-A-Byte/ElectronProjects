@@ -15,6 +15,7 @@ const issueDate = document.getElementById('issueDate');
 const maturityDate = document.getElementById('maturityDate');
 const paymentInterval = document.getElementById('payInterval');
 
+
 function onSubmit(){
     details = new holderDetails.PolicyHolderDetails(name.value, 
         policyNumber.value,
@@ -53,6 +54,12 @@ function onAddHolder(){
         content.innerHTML = data.toString();
     });
 
+}
+
+function onSignIn(){
+    console.log(window.location);
+
+    ipc.send(eventNames.requestSignIn);
 }
 
 $( '#topheader .navbar-nav a' ).on( 'click', function () {

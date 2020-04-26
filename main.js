@@ -36,6 +36,8 @@ app.on('ready', function(){
     }));
     mainWindow.openDevTools();
 
+    console.log(mainWindow.location)
+
     myNotification = new Notification({
         title: 'Title', 
         body: 'Lorem Ipsum Dolor Sit Amet'
@@ -81,6 +83,56 @@ ipc.on(eventNames.requestReminders, (event) => {
     
     myNotification.show();
     
+});
+
+
+/////
+ 
+    // client id of the project
+    var clientId = "640191146884-lr73jgorgnsr9v5vbtugqa6lobg843tl.apps.googleusercontent.com";
+
+    // redirect_uri of the project
+    var redirect_uri = "http://localhost";
+
+    // scope of the project
+//https://www.googleapis.com/auth/drive	See, edit, create, and delete all of your Google Drive files
+//https://www.googleapis.com/auth/drive.file View and manage Google Drive files and folders that you have opened or created with this app
+//https://www.googleapis.com/auth/drive.metadata.readonly View metadata for files in your Google Drive
+//https://www.googleapis.com/auth/drive.photos.readonly View the photos, videos and albums in your Google Photos
+//https://www.googleapis.com/auth/drive.readonly See and download all your Google Drive files
+    var scope = "https://www.googleapis.com/auth/drive.file";
+
+    // // the url to which the user is redirected to
+     var gourl = "";
+
+    function signIn(clientId,redirect_uri,scope,url){
+        // the actual url to which the user is redirected to  
+        var gourl = "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri="+redirect_uri
+        +"&prompt=consent&response_type=code&client_id="+clientId+"&scope="+scope
+        +"&access_type=offline";
+        // this line makes the user redirected to the url
+        //window.location = gourl;
+
+        return gourl;
+     }
+/////
+
+ipc.on(eventNames.requestSignIn, (event, reply) => {
+    let googleSignIn = new BrowserWindow({
+        parent: mainWindow,
+        width: 500,
+        height: 630,
+        modal: true,
+        autoHideMenuBar: true, 
+        webPreferences: {
+        nodeIntegration: true
+    }});
+
+    googleSignIn.loadURL(signIn(clientId,redirect_uri,scope,url),
+        {userAgent: 'Firefox'});
+    // googleSignIn.openDevTools();
+
+    googleSignIn.show();
 });
 //#endregion
 
