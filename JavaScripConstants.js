@@ -1,3 +1,7 @@
+//#region non specific
+module.exports.const_fileServer = 'fs';
+//#endregion
+
 //#region electron
 module.exports.const_electron = 'electron';
 module.exports.const_url = 'url';
@@ -6,4 +10,12 @@ module.exports.const_path = 'path';
 
 //#region nedb
 module.exports.const_nedb = 'nedb';
+//#endregion
+
+//#region google_apis
+module.exports.const_googleApis = 'googleapis';
+//#endregion
+
+//#region user defined
+module.exports.const_backup = './drive_backup'
 //#endregion
