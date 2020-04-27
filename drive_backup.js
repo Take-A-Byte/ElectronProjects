@@ -1,5 +1,8 @@
 
 const jsConsts = require('./JavaScripConstants');
+
+const fetch = require(jsConsts.const_node_fetch);
+const request = require(jsConsts.const_request);
 const fs = require(jsConsts.const_fileServer);
 const { google} = require(jsConsts.const_googleApis);
 
@@ -19,7 +22,7 @@ module.exports.GoogleSignIn = (mainWindow) => {
         }
         else{
             oAuth2Client.setCredentials(JSON.parse(token));
-            listFiles(oAuth2Client);
+            ListFiles(oAuth2Client);
         }
     });
 
@@ -38,12 +41,12 @@ let approvalURL = "https://accounts.google.com/o/oauth2/approval/v2?auto=false&r
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = 'token.json';
-const USERINFO_PATH = 'user_info.json';
+const USERINFO_PATH = './UserInfo/user_info.json';
   
 let oAuth2Client;  
 let gotAuthToken = false; 
 //#endregion
-const fetch = require("node-fetch");
+
 //#region functions 
 fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) {
@@ -73,7 +76,7 @@ function GetGoogleDrivePermisions(mainWindow){
     }});
 
     ////
-    googleSignIn.loadURL(getAccessToken(),
+    googleSignIn.loadURL(GetAccessToken(),
                         {userAgent: 'Firefox'});
   
     //#region event handlers
@@ -84,52 +87,69 @@ function GetGoogleDrivePermisions(mainWindow){
     });
     
     googleSignIn.webContents.on("page-title-updated", (event, title)=>{
-            if(gotAuthToken){
-                let startIndex = 13;
-                let endIndex = title.indexOf("&scope");
-                let code = title.substring(startIndex, endIndex);
-                oAuth2Client.getToken(code, (err, token) => {
-                    if (err) return console.error('Error retrieving access token', err);
-                    oAuth2Client.setCredentials(token);
-                    // Store the token to disk for later program executions
-                    fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-                    if (err) return console.error(err);
-                    console.log('Token stored to', TOKEN_PATH);
-                    });
-                    
-                    link = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token.access_token; 
-                    fetch(link).then(res => res.json()).then((info) => {
-                        fs.writeFile(USERINFO_PATH, JSON.stringify(info), (err) => {
-                            if (err) return console.error(err);
-                            console.log('user info stored to', USERINFO_PATH);
-                            });
-                    }).catch(err => console.log(err));
-                        
-                    listFiles(oAuth2Client);
-                });
-                
-                googleSignIn.close();
-            }
+        if(gotAuthToken){
+            SaveTokenAndUserData(title);
+            googleSignIn.close();
+        }
     });
     //#endregion
 
     googleSignIn.show();
 };
 
-function getAccessToken() {
+function GetAccessToken() {
     const authUrl = oAuth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES,
     });
   
     return authUrl;
-  };
-  
+};
+
+function SaveTokenAndUserData(title){
+    let startIndex = 13;
+    let endIndex = title.indexOf("&scope");
+    let code = title.substring(startIndex, endIndex);
+    oAuth2Client.getToken(code, (err, token) => {
+        if (err) return console.error('Error retrieving access token', err);
+        oAuth2Client.setCredentials(token);
+         
+        SaveUserData();
+
+        // Store the token to disk for later program executions
+        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+            if (err) return console.error(err);
+            console.log('Token stored to', TOKEN_PATH);
+        });
+                                
+        ListFiles(oAuth2Client);
+    });
+};
+
+function SaveUserData(){     
+    link = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token.access_token; 
+
+    fetch(link).then(res => res.json()).then((info) => {
+        //create userinfo dir if not present
+        fs.mkdir("UserInfo", () => {"user folder created"});
+
+        //download user profile pic
+        DownloadImage(info.picture, './UserInfo/profilePicture.png', function(){
+            console.log('saved profile picture');
+        });
+
+        fs.writeFile(USERINFO_PATH, JSON.stringify(info), (err) => {
+            if (err) return console.error(err);
+            console.log('user info stored to', USERINFO_PATH);
+        });
+    }).catch(err => console.log(err));
+};
+
 /**
  * Lists the names and IDs of up to 10 files.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listFiles(auth) {
+function ListFiles(auth) {
     const drive = google.drive({version: 'v3', auth});
   
     // drive.files.list({
@@ -147,5 +167,12 @@ function listFiles(auth) {
     //     console.log('No files found.');
     //   }
     // });
-}
+};
+
+function DownloadImage(uri, filename, callback){
+    request.head(uri, function(err, res, body){
+      request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+    });
+};
+ 
 //#endregion

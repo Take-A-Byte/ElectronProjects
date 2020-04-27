@@ -1,5 +1,7 @@
 //#region non specific
 module.exports.const_fileServer = 'fs';
+module.exports.const_node_fetch = 'node-fetch';
+module.exports.const_request = 'request';
 //#endregion
 
 //#region electron
