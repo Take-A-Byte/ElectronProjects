@@ -52,11 +52,15 @@ app.on('ready', function(){
 //#endregion
 
 //#region ipc event handler
+ipc.on(eventNames.requestTokenStatus, (event) =>{
+    event.reply(eventNames.reply_tokenStatus, drive_backup.TokenPresent);
+});
+
 ipc.on(eventNames.requestAddHolder, (event, reply) => {
     database.insert(reply, (err, newDoc) => {
         console.log(err);
 
-        event.reply(eventNames.addHolderRequestReply, [err, newDoc]);
+        event.reply(eventNames.reply_addHolder, [err, newDoc]);
     });
 });
 
@@ -79,7 +83,7 @@ ipc.on(eventNames.requestReminders, (event) => {
             }
         });
 
-        event.reply(eventNames.reminderRequestReply, [err, weekReminder]);
+        event.reply(eventNames.reply_reminders, [err, weekReminder]);
     });
     
     myNotification.show();
@@ -87,7 +91,7 @@ ipc.on(eventNames.requestReminders, (event) => {
 });
 
 ipc.on(eventNames.requestSignIn, (event, reply) => {
-    drive_backup.GoogleSignIn(mainWindow);
+    drive_backup.GoogleSignIn(event, mainWindow);
 });
 //#endregion
 

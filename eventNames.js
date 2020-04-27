@@ -1,7 +1,11 @@
 module.exports.requestAddHolder = 'requestAddHolder';
-module.exports.addHolderRequestReply = 'addHolderRequestReply';
+module.exports.reply_addHolder = 'addHolderRequestReply';
 
 module.exports.requestReminders = 'requestReminders';
-module.exports.reminderRequestReply = 'reminderRequestReply;';
+module.exports.reply_reminders = 'reminderRequestReply;';
 
 module.exports.requestSignIn = 'requestSignIn';
+module.exports.reply_signIn = 'signInRequestReply';
+
+module.exports.requestTokenStatus = 'requestTokenStatus';
+module.exports.reply_tokenStatus = 'tokenStatusRequestReply';

@@ -1,5 +1,7 @@
 
 const jsConsts = require('./JavaScripConstants');
+const eventNames = require('./eventNames');
+const programFilePath = require('./fileLocations');
 
 const fetch = require(jsConsts.const_node_fetch);
 const request = require(jsConsts.const_request);
@@ -10,7 +12,7 @@ const electron = require(jsConsts.const_electron);
 const {BrowserWindow} = electron;
 
 //#region exports
-module.exports.GoogleSignIn = (mainWindow) => {
+module.exports.GoogleSignIn = function(sender, mainWindow) {
     const {client_secret, client_id, redirect_uris} = credentials.installed;
     oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
@@ -18,7 +20,7 @@ module.exports.GoogleSignIn = (mainWindow) => {
     fs.readFile(TOKEN_PATH, (err, token) => {
         if (err) {
             console.log("\ngetting permissions for google drive!\n");
-            GetGoogleDrivePermisions(mainWindow, credentials);
+            GetGoogleDrivePermisions(sender, mainWindow);
         }
         else{
             oAuth2Client.setCredentials(JSON.parse(token));
@@ -26,7 +28,7 @@ module.exports.GoogleSignIn = (mainWindow) => {
         }
     });
 
-}
+};
 
 module.exports.TokenPresent = false;
 //#endregion
@@ -40,8 +42,7 @@ let approvalURL = "https://accounts.google.com/o/oauth2/approval/v2?auto=false&r
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = 'token.json';
-const USERINFO_PATH = './UserInfo/user_info.json';
+const TOKEN_PATH = programFilePath.userInfoFolder + '/token.json';
   
 let oAuth2Client;  
 let gotAuthToken = false; 
@@ -64,7 +65,7 @@ fs.readFile('credentials.json', (err, content) => {
     credentials = JSON.parse(content);
 });
 
-function GetGoogleDrivePermisions(mainWindow){
+function GetGoogleDrivePermisions(sender, mainWindow){
     let googleSignIn = new BrowserWindow({
         parent: mainWindow,
         width: 500,
@@ -88,8 +89,9 @@ function GetGoogleDrivePermisions(mainWindow){
     
     googleSignIn.webContents.on("page-title-updated", (event, title)=>{
         if(gotAuthToken){
-            SaveTokenAndUserData(title);
+            SaveTokenAndUserData(sender,title);
             googleSignIn.close();
+            gotAuthToken = false;
         }
     });
     //#endregion
@@ -106,7 +108,7 @@ function GetAccessToken() {
     return authUrl;
 };
 
-function SaveTokenAndUserData(title){
+function SaveTokenAndUserData(sender, title){
     let startIndex = 13;
     let endIndex = title.indexOf("&scope");
     let code = title.substring(startIndex, endIndex);
@@ -114,7 +116,7 @@ function SaveTokenAndUserData(title){
         if (err) return console.error('Error retrieving access token', err);
         oAuth2Client.setCredentials(token);
          
-        SaveUserData();
+        SaveUserData(sender, token);
 
         // Store the token to disk for later program executions
         fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
@@ -126,7 +128,7 @@ function SaveTokenAndUserData(title){
     });
 };
 
-function SaveUserData(){     
+function SaveUserData(sender, token){     
     link = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token.access_token; 
 
     fetch(link).then(res => res.json()).then((info) => {
@@ -134,14 +136,18 @@ function SaveUserData(){
         fs.mkdir("UserInfo", () => {"user folder created"});
 
         //download user profile pic
-        DownloadImage(info.picture, './UserInfo/profilePicture.png', function(){
+        DownloadImage(info.picture, programFilePath.userProfilePic, function(){
+            fs.writeFile(programFilePath.userInfo, JSON.stringify(info), (err) => {
+                if (err) return console.error(err);
+                console.log('user info stored to', programFilePath.userInfo);
+            });
+            
+            console.log("signIn done!\n");
+            sender.reply(eventNames.reply_signIn);
+            
             console.log('saved profile picture');
         });
 
-        fs.writeFile(USERINFO_PATH, JSON.stringify(info), (err) => {
-            if (err) return console.error(err);
-            console.log('user info stored to', USERINFO_PATH);
-        });
     }).catch(err => console.log(err));
 };
 

@@ -1,8 +1,9 @@
 
 const jsConsts = require('./JavaScripConstants');
 const eventNames = require('./eventNames'); 
-const fs = require('fs') 
+const programFilePath = require('./fileLocations');
 
+const fs = require(jsConsts.const_fileServer); 
 const electron = require(jsConsts.const_electron);
 const ipc = electron.ipcRenderer;
 
@@ -15,6 +16,9 @@ const issueDate = document.getElementById('issueDate');
 const maturityDate = document.getElementById('maturityDate');
 const paymentInterval = document.getElementById('payInterval');
 
+const login = document.getElementById('login');
+const username = document.getElementById('username');
+const dp = document.getElementById('dp');
 
 function onSubmit(){
     details = new holderDetails.PolicyHolderDetails(name.value, 
@@ -32,18 +36,55 @@ function retriveReminderForWeek(){
 };
 
 //#region IPC event handlers
-ipc.on(eventNames.addHolderRequestReply, (event, args) => {
+ipc.on(eventNames.reply_addHolder, (event, args) => {
     if(args[0] != null) alert(args[0]);
     else alert("Policy Holder Added!");
     console.log(args);
 });
 
-ipc.on(eventNames.reminderRequestReply, (event, args) => {
+ipc.on(eventNames.reply_reminders, (event, args) => {
     if(args[0] != null) alert(args[0]);
     else alert("Policy Reminders recovered sucessfully!");
     console.log(args[1]);
 });
+
+ipc.on(eventNames.reply_tokenStatus, (event, arg) => {
+    console.log("in reply", arg);
+    if(arg){
+        fs.readFile(programFilePath.userInfo, (err, data) => {
+            if(err){
+                console.log(err);
+            }
+            else{
+                var userData = JSON.parse(data);
+                login.style.display = "none"; 
+                dp.src = programFilePath.userProfilePic;
+                dp.style.display = "inline";
+                username.innerHTML = userData.name;
+            }
+        });
+    };
+});
+
+ipc.on(eventNames.reply_signIn, (event) => {
+    fs.readFile(programFilePath.userInfo, (err, data) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            var userData = JSON.parse(data);
+            login.style.display = "none"; 
+            dp.src = programFilePath.userProfilePic;
+            dp.style.display = "inline";
+            username.innerHTML = userData.name;
+        }
+    });
+});
 //#endregion
+
+function MainWindowLoaded(){
+    ipc.send(eventNames.requestTokenStatus);
+};
 
 function onAddHolder(){
     const content = document.getElementById('content');

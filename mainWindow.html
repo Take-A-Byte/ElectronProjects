@@ -8,8 +8,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
-<body>
-    <div  id="topheader">
+<body onload="MainWindowLoaded()">
+    <div id="topheader">
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
             <a class="navbar-brand" href="#">
                 <img src=".\node_modules\bootstrap-icons\icons\graph-up-white.svg" 
@@ -42,7 +42,15 @@
 
                 <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                     <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item active" style="height: 100%;">
+                            <img id="dp" style="height: 2.5rem; display: none;"
+                                 alt="DP" fill="white">
+                        </li>
                         <li class="nav-item active">
+                            <a id="username" class="nav-link" href="#"></a>
+                        </li>
+                        <li id="login" class="nav-item active">
                             <a class="nav-link" href="#" onclick="onSignIn()">Login</a>
                         </li>
                     </ul>
