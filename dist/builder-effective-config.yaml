@@ -1,7 +1,0 @@
-directories:
-  output: dist
-  buildResources: build
-appId: database
-win:
-  icon: icon.jpg
-electronVersion: 8.2.0
