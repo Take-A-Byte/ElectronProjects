@@ -1,6 +1,7 @@
-
+.dist/
 database_trials-win32-x64/
 .vs/
 token.json
 user_info.json
 /UserInfo
+/dist/
