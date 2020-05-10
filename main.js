@@ -4,7 +4,7 @@ const eventNames = require('./eventNames');
 
 const drive_backup = require(jsConsts.const_backup);
 
-const PolicyHolderDetails = require('./policyHolder').PolicyHolderDetails;
+const PolicyHolderDetails = require('./policyHolderModel').PolicyHolderDetails;
 
 const electron = require(jsConsts.const_electron);
 const url = require(jsConsts.const_url);
@@ -57,6 +57,7 @@ ipc.on(eventNames.requestTokenStatus, (event) =>{
 });
 
 ipc.on(eventNames.requestAddHolder, (event, reply) => {
+    console.log(reply);
     database.insert(reply, (err, newDoc) => {
         console.log(err);
 

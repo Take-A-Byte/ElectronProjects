@@ -6,12 +6,32 @@ const programFilePath = require('./fileLocations');
 const fetch = require(jsConsts.const_node_fetch);
 const request = require(jsConsts.const_request);
 const fs = require(jsConsts.const_fileServer);
-const { google} = require(jsConsts.const_googleApis);
+const { google } = require(jsConsts.const_googleApis);
 
 const electron = require(jsConsts.const_electron);
 const {BrowserWindow} = electron;
 
+//#region variables
+let credentials;
+// If modifying these scopes, delete token.json.
+const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly', 
+                'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/drive.file'];
+let approvalURL = "https://accounts.google.com/o/oauth2/approval/v2?auto=false&response=code";
+
+// The file token.json stores the user's access and refresh tokens, and is
+// created automatically when the authorization flow completes for the first
+// time.
+const TOKEN_PATH = programFilePath.userInfoFolder + '/token.json';
+const driveSavingPathInfo = programFilePath.userInfoFolder + '/driveSavingLocationIDs.json'
+  
+let oAuth2Client;  
+let gotAuthToken = false; 
+//#endregion
+
 //#region exports
+module.exports.TokenPresent = false;
+
 module.exports.GoogleSignIn = function(sender, mainWindow) {
     const {client_secret, client_id, redirect_uris} = credentials.installed;
     oAuth2Client = new google.auth.OAuth2(
@@ -27,25 +47,7 @@ module.exports.GoogleSignIn = function(sender, mainWindow) {
             ListFiles(oAuth2Client);
         }
     });
-
 };
-
-module.exports.TokenPresent = false;
-//#endregion
-
-//#region variables
-let credentials;
-// If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/userinfo.profile'];
-let approvalURL = "https://accounts.google.com/o/oauth2/approval/v2?auto=false&response=code";
-
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-const TOKEN_PATH = programFilePath.userInfoFolder + '/token.json';
-  
-let oAuth2Client;  
-let gotAuthToken = false; 
 //#endregion
 
 //#region functions 
@@ -116,15 +118,19 @@ function SaveTokenAndUserData(sender, title){
         if (err) return console.error('Error retrieving access token', err);
         oAuth2Client.setCredentials(token);
          
-        SaveUserData(sender, token);
+        //create userinfo dir if not present
+        fs.mkdir("UserInfo", (err, result) => {
+            
+            SaveUserData(sender, token);
 
-        // Store the token to disk for later program executions
-        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-            if (err) return console.error(err);
-            console.log('Token stored to', TOKEN_PATH);
+            // Store the token to disk for later program executions
+            fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+                if (err) return console.error(err);
+                console.log('Token stored to', TOKEN_PATH);
+    
+                ListFiles(oAuth2Client);
+            });
         });
-                                
-        ListFiles(oAuth2Client);
     });
 };
 
@@ -132,9 +138,7 @@ function SaveUserData(sender, token){
     link = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + token.access_token; 
 
     fetch(link).then(res => res.json()).then((info) => {
-        //create userinfo dir if not present
-        fs.mkdir("UserInfo", () => {"user folder created"});
-
+        
         //download user profile pic
         DownloadImage(info.picture, programFilePath.userProfilePic, function(){
             fs.writeFile(programFilePath.userInfo, JSON.stringify(info), (err) => {
@@ -162,17 +166,24 @@ function ListFiles(auth) {
     //   pageSize: 10,
     //   fields: 'nextPageToken, files(id, name)',
     // }, (err, res) => {
-    //   if (err) return console.log('The API returned an error: ' + err);
-    //   const files = res.data.files;
-    //   if (files.length) {
-    //     console.log('Files:');
-    //     files.map((file) => {
-    //       console.log(`${file.name} (${file.id})`);
-    //     });
-    //   } else {
-    //     console.log('No files found.');
-    //   }
+    //     if (err) {
+    //         console.log('The API returned an error: ' + err);
+    //     }
+    //     else{
+    //         const files = res.data.files;
+    //         if (files.length) {
+    //             console.log('Files:');
+    //             files.map((file) => {
+    //             console.log(`${file.name} (${file.id})`);
+    //             });
+    //         } else {
+    //             console.log('No files found.');
+    //         }
+    //     }
     // });
+
+    console.log('uploading file');
+    UploadFile(auth);
 };
 
 function DownloadImage(uri, filename, callback){
@@ -180,5 +191,64 @@ function DownloadImage(uri, filename, callback){
       request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
     });
 };
+
  
+function UploadFile(auth) {
+    console.log('uploading file inside!');
+    const drive = google.drive({version: 'v3', auth});
+
+    drive.files.list({
+        'name': 'Agent Companion'
+    }, function(err, folder) {
+        console.log(err,folder);
+    });
+
+    var fileMetadata = {
+        'name': 'Agent Companion',
+        'mimeType': 'application/vnd.google-apps.folder'
+      };
+      drive.files.create({
+        resource: fileMetadata,
+        fields: 'id'
+      }, function (err, folder) {
+        if (err) {
+          // Handle error
+          console.error(err);
+        } else {
+            console.log('Folder Id: ', folder.data.id);
+
+            var fileMetadata = {
+                'name': 'database.db',
+                parents: [folder.data.id]
+              };
+              var media = {
+                mimeType: 'database/db',
+                body: fs.createReadStream('database.db')
+              };
+              drive.files.create({
+                resource: fileMetadata,
+                media: media,
+                fields: 'id'
+              }, function (err, file) {
+                if (err) {
+                  // Handle error
+                  console.error(err);
+                } else {
+                driveSavePathIDs = "{\"folderID\":" + folder.data.id + ",\"databaseID\":" + file.data.id +"}";
+                fs.writeFile(driveSavingPathInfo, driveSavePathIDs, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else{
+                        console.log("\n\ncreated file!");
+                    }
+                });
+                
+                  console.log('File Id: ', file.data.id);
+                }
+              });
+        }
+      });
+  }
+  
 //#endregion

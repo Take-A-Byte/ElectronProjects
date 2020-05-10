@@ -7,7 +7,7 @@ const fs = require(jsConsts.const_fileServer);
 const electron = require(jsConsts.const_electron);
 const ipc = electron.ipcRenderer;
 
-const holderDetails = require('./policyHolder');
+const holderDetails = require('./policyHolderModel');
 
 const name = document.getElementById('name');
 const policyNumber = document.getElementById('policyNumber');
@@ -19,21 +19,6 @@ const paymentInterval = document.getElementById('payInterval');
 const login = document.getElementById('login');
 const username = document.getElementById('username');
 const dp = document.getElementById('dp');
-
-function onSubmit(){
-    details = new holderDetails.PolicyHolderDetails(name.value, 
-        policyNumber.value,
-        policyType.value, 
-        new Date(issueDate.value).getTime(), 
-        new Date(maturityDate.value).getTime(), 
-        paymentInterval.value);
-    
-    ipc.send(eventNames.requestAddHolder, details);
-};
-
-function retriveReminderForWeek(){
-    ipc.send(eventNames.requestReminders);
-};
 
 //#region IPC event handlers
 ipc.on(eventNames.reply_addHolder, (event, args) => {
@@ -83,10 +68,34 @@ ipc.on(eventNames.reply_signIn, (event) => {
 //#endregion
 
 function MainWindowLoaded(){
+    const content = document.getElementById('content');
+    content.innerHTML = "<h5> HOME </h5>";
     ipc.send(eventNames.requestTokenStatus);
 };
 
-function onAddHolder(){
+function retriveReminderForWeek(){
+    ipc.send(eventNames.requestReminders);
+};
+
+function onSubmit(){
+    console.log('in submit function');
+    details = new holderDetails.PolicyHolderDetails(name.value, 
+        policyNumber.value,
+        policyType.value, 
+        new Date(issueDate.value).getTime(), 
+        new Date(maturityDate.value).getTime(), 
+        paymentInterval.value);
+    
+    ipc.send(eventNames.requestAddHolder, details);
+};
+
+function onHomeClicked(){
+    const content = document.getElementById('content');
+
+    content.innerHTML = "<h5> HOME </h5>";
+};
+
+function onAddHolderClicked(){
     const content = document.getElementById('content');
 
     fs.readFile('addPolicyHolder.html', (err, data) => { 
@@ -94,12 +103,19 @@ function onAddHolder(){
       
         content.innerHTML = data.toString();
     });
-
 }
 
-function onSignIn(){
-    console.log(window.location);
+function onRemindersClicked(){
+    const content = document.getElementById('content');
 
+    fs.readFile('reminders.html', (err, data) => { 
+        if (err) throw err; 
+      
+        content.innerHTML = data.toString();
+    });
+};
+
+function onSignIn(){
     ipc.send(eventNames.requestSignIn);
 }
 
