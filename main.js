@@ -66,21 +66,26 @@ ipc.on(eventNames.requestAddHolder, (event, reply) => {
 });
 
 ipc.on(eventNames.requestReminders, (event) => {
-
     database.find({}, (err, docs) => {
         var weekReminder = [];
     
-        docs.forEach(element => {
-            
-            var dateAfterWeek = new Date(Date.now());
-            dateAfterWeek = new Date(dateAfterWeek.getTime() + (7 * 24 * 60 * 60 * 1000));
+        var dateBefore30Days = new Date(new Date(Date.now()).getTime() - (30 * 24 * 60 * 60 * 1000));
 
+        docs.forEach(element => {
+            console.log(element.Name);
             var nextPayDate = new Date(element.NextPaymentDate);
 
-            if(nextPayDate > Date.now() && nextPayDate < dateAfterWeek)
+            if(nextPayDate < Date.now() && nextPayDate > dateBefore30Days)
             {
-                weekReminder.push("Reminder for " + element.Name + ",with Policy No. " + element._id +
-                 " has payment due on: " + new Date(element.NextPaymentDate));
+                
+                var dateAfter30Days = new Date(nextPayDate.getTime() + (30 * 24 * 60 * 60 * 1000));
+                var dueStartDate = nextPayDate.getUTCDate() + '/' + nextPayDate.getUTCMonth() + '/' + nextPayDate.getUTCFullYear(); 
+                var dueEndDate = dateAfter30Days.getUTCDate() + '/' + dateAfter30Days.getUTCMonth() + '/' + dateAfter30Days.getUTCFullYear(); 
+
+                weekReminder.push(
+                    "Reminder for " + element.Name + ", with Policy No. " + element._id +
+                    " has to pay premium of Rs." + element.premium + " in between " + dueStartDate + " and " +  dueEndDate + 
+                    "\nMobile number: " + element.MobileNo);
             }
         });
 
@@ -102,9 +107,12 @@ function RefreshDatabase(){
             console.log(element.Name);
             var nextDateSet = false;
             var date = new Date(element.NextPaymentDate);
+            console.log(date);
+            var dateBefore30Days = new Date(new Date(Date.now()).getTime() - (30 * 24 * 60 * 60 * 1000));
 
-            if(date < Date.now())
+            if(date < dateBefore30Days)
             {
+                console.log('changing next payment date for: ' + element.Name + " from " + date);
                 do{
                     date = new Date(date.getTime() + (element.PaymentInterval * 24 * 60 * 60 * 1000));
     

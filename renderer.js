@@ -9,13 +9,6 @@ const ipc = electron.ipcRenderer;
 
 const holderDetails = require('./policyHolderModel');
 
-const name = document.getElementById('name');
-const policyNumber = document.getElementById('policyNumber');
-const policyType = document.getElementById('policyType');
-const issueDate = document.getElementById('issueDate');
-const maturityDate = document.getElementById('maturityDate');
-const paymentInterval = document.getElementById('payInterval');
-
 const login = document.getElementById('login');
 const username = document.getElementById('username');
 const dp = document.getElementById('dp');
@@ -73,18 +66,35 @@ function MainWindowLoaded(){
     ipc.send(eventNames.requestTokenStatus);
 };
 
-function retriveReminderForWeek(){
+function retriveReminders(){
     ipc.send(eventNames.requestReminders);
 };
 
 function onSubmit(){
     console.log('in submit function');
-    details = new holderDetails.PolicyHolderDetails(name.value, 
+    
+    //#region holder details
+    const name = document.getElementById('name');
+    const dob = document.getElementById('DOB');
+    const mobileNo = document.getElementById('mobileNo');
+    const policyNumber = document.getElementById('policyNumber');
+    const policyTermCode = document.getElementById('policyTermCode');
+    const issueDate = document.getElementById('comencementDate');
+    const maturityDate = document.getElementById('maturityDate');
+    const paymentInterval = document.getElementById('payInterval');
+    const premium = document.getElementById('premium');
+    //#endregion
+
+    details = new holderDetails.PolicyHolderDetails(
+        name.value,
+        new Date(dob.value).getTime(),
+        mobileNo.value,
         policyNumber.value,
-        policyType.value, 
+        policyTermCode.value,
         new Date(issueDate.value).getTime(), 
         new Date(maturityDate.value).getTime(), 
-        paymentInterval.value);
+        paymentInterval.value,
+        premium.value);
     
     ipc.send(eventNames.requestAddHolder, details);
 };

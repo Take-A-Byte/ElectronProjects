@@ -1,5 +1,3 @@
-{"Name":"Shantanu Methikar","_id":"0123","PolicyType":"Policy_1","IssueDate":1585699200000,"MaturityDate":1680220800000,"PaymentInterval":"30","NextPaymentDate":1590883200000}
-{"Name":"Ajinkya Dixit","_id":"1234","PolicyType":"Policy_2","IssueDate":1577750400000,"MaturityDate":1703894400000,"PaymentInterval":"45","NextPaymentDate":1589414400000}
-{"Name":"Monika Shinde","_id":"2345","PolicyType":"Policy_3","IssueDate":1539043200000,"MaturityDate":1602115200000,"PaymentInterval":"60","NextPaymentDate":1590883200000}
-{"Name":"Jitendra Methikar","_id":"8765","PolicyType":"Policy_2","IssueDate":1584835200000,"MaturityDate":1710979200000,"PaymentInterval":"30","NextPaymentDate":1590019200000}
-{"Name":"Sushma Methikar","_id":"9876","PolicyType":"Policy_1","IssueDate":1587340800000,"MaturityDate":1650326400000,"PaymentInterval":"30","NextPaymentDate":1589932800000}
+{"Name":"Shantanu Methikar","DOB":845596800000,"MobileNo":"8624071741","_id":"1234","PolicyTermCode":"23/123/256","IssueDate":1589241600000,"MaturityDate":1746921600000,"PaymentInterval":"30","Premium":"","IsPaymentDue":true,"NextPaymentDate":1591833600000,"premium":"200"}
+{"Name":"Kapil Badhe","DOB":829699200000,"MobileNo":"9226152150","_id":"2345","PolicyTermCode":"20/452/523","IssueDate":1586476800000,"MaturityDate":1744156800000,"PaymentInterval":"30","Premium":"","IsPaymentDue":true,"NextPaymentDate":1591660800000,"premium":"196"}
+{"Name":"Ajinkya Dixit","DOB":823046400000,"MobileNo":"8793697919","_id":"2356","PolicyTermCode":"12/58/895","IssueDate":1586476800000,"MaturityDate":1901923200000,"PaymentInterval":"30","Premium":"","IsPaymentDue":true,"NextPaymentDate":1589068800000,"premium":"563"}

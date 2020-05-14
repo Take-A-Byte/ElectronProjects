@@ -26,13 +26,13 @@
         <label for="policyNumber" class="col-2">Policy Number:</label>
         <input id="policyNumber" type="text" class="form-control col-4" placeholder="Enter policy number">
 
-        <label for="policyTerm" class="col-2">Plan/Term:</label>
-        <input id="policyTerm" type="text" class="form-control col-4" placeholder="Enter Plan/Term">
+        <label for="policyTermCode" class="col-2">Plan/Term:</label>
+        <input id="policyTermCode" type="text" class="form-control col-4" placeholder="Enter Plan/Term">
     </div>
 
     <div class="form-group row" >
-        <label for="issueDate" class="col-2">D.O.C:</label>
-        <input id="issueDate" type="date" class="form-control col-4" placeholder="Select Issue Date">
+        <label for="comencementDate" class="col-2">D.O.C:</label>
+        <input id="comencementDate" type="date" class="form-control col-4" placeholder="Select Issue Date">
                 
         <label for="maturityDate" class="col-2">Maturity Date:</label>
         <input id="maturityDate" type="date" class="form-control col-4" placeholder="Select Maturity Date">
@@ -47,11 +47,11 @@
         <label for="payInterval" class="col-2">Payment Interval:</label>
         <input id="payInterval" type="number" min="1" class="form-control col-4" placeholder="Select Payment Interval (in days)">
                 
-        <label for="premium" class="col-2">Premium:</label>
+        <label for="premium" class="col-2" >Premium:</label>
         <input id="premium" type="text" min="1" class="form-control col-4" placeholder="Enter Premium in Rupees">
     </div>
             
     <div class="form-group text-center" style="margin-top: 1rem;">
-        <button type="submit" class="btn btn-primary" onclick="onSubmit()">Submit</button>
+        <button class="btn btn-primary" onclick="onSubmit()">Submit</button>
     </div>
 </form>
