@@ -24,7 +24,7 @@ RefreshDatabase();
 //#endregion
     
 //#region mainWin Instantiation
-let mainWindow, myNotification;
+let mainWindow;
 
 app.on('ready', function(){
     mainWindow = new BrowserWindow({
@@ -38,16 +38,6 @@ app.on('ready', function(){
         slashes: true
     }));
     mainWindow.openDevTools();
-
-    myNotification = new Notification({
-        title: 'Title', 
-        body: 'Lorem Ipsum Dolor Sit Amet'
-    });
-
-    myNotification.on('click', (event, reply) => {
-        console.log('Notification clicked')
-    });
-    
 });
 //#endregion
 
@@ -90,9 +80,18 @@ ipc.on(eventNames.requestReminders, (event) => {
         });
 
         event.reply(eventNames.reply_reminders, [err, weekReminder]);
+            
+        var myNotification = new Notification({
+            title: 'Policy Agent Companion', 
+            body: 'Hi there!\nThere are a total of ' + weekReminder.length + ' payment(s) due.\nVisit Reminders page for more info.'
+        });
+
+        myNotification.on('click', (event, reply) => {
+            console.log('Notification clicked')
+        });
+        
+        myNotification.show();
     });
-    
-    myNotification.show();
     
 });
 
