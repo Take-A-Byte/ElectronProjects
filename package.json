@@ -1,11 +1,11 @@
 {
-  "name": "database_trials",
+  "name": "agent-companion",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir",
+    "pack": "electron-builder --dir '../Build/'",
     "dist": "electron-builder"
   },
   "author": "Shantanu Methikar",
@@ -22,9 +22,13 @@
     "request": "^2.88.2"
   },
   "build": {
-    "appId": "database",
+    "appId": "AgentCompanion",
     "win": {
-      "icon": "icon.jpg"
-    }
+      "icon": "icon.png"
+    },
+    "extraFiles": [
+      "icon.png",
+      "credentials.json"
+    ]
   }
 }

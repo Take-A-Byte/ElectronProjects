@@ -11,14 +11,14 @@ const url = require(jsConsts.const_url);
 const path = require(jsConsts.const_path);
 const ipc = electron.ipcMain;
 
-const { app, BrowserWindow, Notification } = electron;
+const { app, BrowserWindow } = electron;
 
 //#endregion
 
 //#region nedb_requirements and instantiation
 const Datastore = require(jsConsts.const_nedb);
 
-const database = new Datastore('database.db');
+const database = new Datastore('../Data/database.db');
 database.loadDatabase();
 RefreshDatabase();
 //#endregion
@@ -80,17 +80,6 @@ ipc.on(eventNames.requestReminders, (event) => {
         });
 
         event.reply(eventNames.reply_reminders, [err, weekReminder]);
-            
-        var myNotification = new Notification({
-            title: 'Policy Agent Companion', 
-            body: 'Hi there!\nThere are a total of ' + weekReminder.length + ' payment(s) due.\nVisit Reminders page for more info.'
-        });
-
-        myNotification.on('click', (event, reply) => {
-            console.log('Notification clicked')
-        });
-        
-        myNotification.show();
     });
     
 });
