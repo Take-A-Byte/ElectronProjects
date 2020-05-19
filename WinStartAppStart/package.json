@@ -1,0 +1,30 @@
+{
+  "name": "automatic_agent_companion",
+  "version": "1.0.0",
+  "description": "will read the database file and \u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[1;5D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[Con windows start, this application will read the database and create a windows notification, notifying user of total due payments.",
+  "main": "winStartMain.js",
+  "scripts": {
+    "start": "node winStartMain.js",
+    "build": "nexe"
+  },
+  "author": "Shantanu Methikar",
+  "license": "ISC",
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "node-notifier": "^7.0.0"
+  },
+  "devDependencies": {
+    "child_process": "^1.0.2",
+    "electron": "^8.3.0",
+    "electron-builder": "^22.6.0"
+  },
+  "build": {
+    "appId": "winStartAgentCompanion",
+    "win": {
+      "icon": "icon.jpg"
+    },
+    "extraFiles": [
+      "icon.png"
+    ]
+  }
+}
