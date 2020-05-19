@@ -1,0 +1,57 @@
+<h3>Enter Policy Holder Information</h3>
+<form style="border: 2px solid black; border-radius: 10px; margin: 1rem; width: 950px;">
+    
+    <div class="form-group" style="margin-top: 1rem;"> 
+        <h5>Personal Information</h5>
+    </div>
+
+    <div class="form-group row">
+        <label for="name" class="col-2">Name:</label>
+        <input id="name" type="text" class="form-control col-4" placeholder="Enter full name">
+                
+        <label for="DOB" class="col-2">Date of Birth:</label>
+        <input id="DOB" type="date" class="form-control col-4" placeholder="Enter Date of Birth">
+    </div>
+
+    <div class="form-group row">
+        <label for="mobileNo" class="col-2">Mobile Number:</label>
+        <input id="mobileNo" type="tel" pattern="[0-9]{10}" class="form-control col-4" placeholder="Enter mobile number">
+    </div>
+
+    <div class="form-group" style="margin-top: 2rem;"> 
+        <h5>Policy Information</h5>
+    </div>
+
+    <div class="form-group row">
+        <label for="policyNumber" class="col-2">Policy Number:</label>
+        <input id="policyNumber" type="text" class="form-control col-4" placeholder="Enter policy number">
+
+        <label for="policyTermCode" class="col-2">Plan/Term:</label>
+        <input id="policyTermCode" type="text" class="form-control col-4" placeholder="Enter Plan/Term">
+    </div>
+
+    <div class="form-group row" >
+        <label for="comencementDate" class="col-2">D.O.C:</label>
+        <input id="comencementDate" type="date" class="form-control col-4" placeholder="Select Issue Date">
+                
+        <label for="maturityDate" class="col-2">Maturity Date:</label>
+        <input id="maturityDate" type="date" class="form-control col-4" placeholder="Select Maturity Date">
+    </div>
+         
+     
+    <div class="form-group" style="margin-top: 2rem;"> 
+        <h5>Payment Information</h5>
+    </div>
+
+    <div class="form-group row">
+        <label for="payInterval" class="col-2">Payment Interval:</label>
+        <input id="payInterval" type="number" min="1" class="form-control col-4" placeholder="Select Payment Interval (in days)">
+                
+        <label for="premium" class="col-2" >Premium:</label>
+        <input id="premium" type="text" min="1" class="form-control col-4" placeholder="Enter Premium in Rupees">
+    </div>
+            
+    <div class="form-group text-center" style="margin-top: 1rem;">
+        <button class="btn btn-primary" onclick="onSubmit()">Submit</button>
+    </div>
+</form>
